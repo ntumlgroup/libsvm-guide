@@ -430,7 +430,7 @@ the whole procedure automatically.
 
 \item Scaled sets with default parameters
 \begin{alltt}\$./svm-scale -l -1 -u 1 -s range1 train.1 > train.1.scale
-\$./svm-scale -l -1 -u 1 -r range1 test.1 > test.1.scale
+\$./svm-scale -r range1 test.1 > test.1.scale
 \$./svm-train train.1.scale
 \$./svm-predict test.1.scale train.1.scale.model test.1.predict
  \(\rightarrow\) Accuracy = 96.15%\end{alltt}
@@ -490,7 +490,7 @@ Training...\end{alltt}
 
 \item Scaled sets with default parameters
 \begin{alltt}\$./svm-scale -l 1 -u -1 -s range3 train.3 > train.3.scale
-\$./svm-scale -l -1 -u 1 -r range3 test.3 > test.3.scale
+\$./svm-scale -r range3 test.3 > test.3.scale
 \$./svm-train train.3.scale
 \$./svm-predict test.3.scale train.3.scale.model test.3.predict
  \(\rightarrow\) Accuracy = 12.1951%\end{alltt}
