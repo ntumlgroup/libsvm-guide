@@ -73,37 +73,50 @@ sections.
 
 \section{Data Preprocessing}
 
-SVM requires each instance of data to be represented
-as a vector of real numbers. So if you have categorical
-attributes in your data, you first have to convert 
-them into numerical data. We recommend using N numbers to 
-represent an N-category attribute. Only one of the N
-numbers are 1, other are zero. For example if you have
-a 3-category attribute, you can represent them as (0,0,1),
-(0,1,0), and (1,0,0).
+A dataset consists of some data instances. Each
+instance has one "target value" and a number of
+"attributes." In classification, the target value 
+is the class of the instance ; in regression, 
+the target is the function value.
+
+The goal of SVM is to produce a model which 
+predicts target value given the attributes.
 
 \subsection{Feature Selection}
 
 Despite people usually claim SVM is free of 
 "curse of dimensionality", it is still bad to 
-have too many features which are not predictive, 
+have too many attributes which are not predictive, 
 especially when the number of instance in the
 data set are small. If you have thousands of
-features, chances are you have to choose a 
-subset of them before give the data to SVM.
+attributes, chances are you have to choose a 
+subset of them before giving the data to SVM.
 We don't have a good approach to feature 
 selection yet.
 
+\subsection{Categorical Feature}
+
+SVM requires each instance of data to be represented
+as a vector of real numbers. So if you have categorical
+attributes in your data, you first have to convert 
+them into numeric data. We recommend using N numbers to 
+represent an N-category attribute. Only one of the N
+numbers are 1, other are zero. For example if you have
+a 3-category attribute, you can represent them as (0,0,1),
+(0,1,0), and (1,0,0). In our experience this works
+better than using a single number to represent a 
+categorical attribute.
+
 \subsection{Scaling}
 
-Scaling is very important and has to be done 
-before applying SVM to get good result. The 
-main reason is to avoid attributes which have 
-large numerical range dominate those have 
-small numeric range. Another reason is to 
-avoid numerical difficuly in the computation. 
-We recommend scale each attribute to 
-$[-1,+1]$ or $[0,1]$.
+Numeric attributes can be used as is, but
+scaling them before applying SVM is very important.
+The main reason is to avoid attributes which have 
+greater numeric range dominate those have 
+smaller numeric range. Another reason is to 
+avoid numeric difficulty during the calculation. 
+We recommend linearly scale each attribute to 
+the range $[-1,+1]$ or $[0,1]$.
 
 Of course you have to use the same method to 
 scale test data before testing.
@@ -119,9 +132,21 @@ values are best for one problem, so some kind of
 model selection (parameter search) must be done. 
 
 We recommend doing a "grid-search" on $C$ and
-$\gamma$. Basically many pairs of $(C,\gamma)$ 
-are tried and the cross-validation accuracy are 
-compared to get the best $(C,\gamma)$.
+$\gamma$. Basically pairs of $(C,\gamma)$ are tried 
+and the cross-validation accuracy are compared to 
+get the best $(C,\gamma)$. We found that trying
+exponentially growing sequences of $C$ and $\gamma$
+can give a good picture where good parameters lie.
+(for example, $C=2^{-6},2^{-5},...,2^{14}$, 
+$\gamma=2^{-14},2^{-13},...,2^4$)
+
+The above approach works well for small-to-medium 
+sized dataset. For larger dataset, the time for
+doing a complete "grid-search" may be prohibitive.
+A feasible approach is to randomly choose
+a subset of the dataset, doing "grid-search" on
+them, then using the best parameters to train
+the complete dataset.
 
 \section{Conclusion}
 
