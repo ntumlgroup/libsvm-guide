@@ -1,0 +1,128 @@
+\documentclass[12pt]{article}
+\usepackage{color}
+
+\title{A Practical Guide to Support Vector Machines}
+
+\begin{document}
+
+\section{Introduction}
+
+SVM (Support Vector Machines) is a newer technique for data
+classification and regression. However, people who are not 
+familiar with SVM almost always get unsatisfactory result 
+at first. Here we provide a "cookbook" approach which usually 
+gives reasonable result.
+
+\section{Real World Examples}
+
+\begin{itemize}
+\item User 1:
+
+{\tt 
+I am using libsvm in a astroparticle physics application (AMANDA
+experiment). First, let me congratulate you to a really easy to
+use and nice package.
+
+Unfortunately, it gives me astonishingly bad results...
+I did ...this... and the accuracy = 75.2\%
+}
+
+\item Answer:
+
+{\tt OK. Send me the data.}
+
+\item Answer:
+
+{\tt I did ...that... and the accuracy = 97.3\% }
+
+\item User 1:
+
+{\tt You earned a copy of my PhD thesis. }
+
+\item User 2:
+
+{\tt
+I am a developer in a bioinformatics laboratory at ...
+We would like to use LIBSVM in a project ...
+The datasets are reasonable unbalanced - there are 221 examples in the
+first set, 117 in the second set and 53 in the third set.
+
+But results not good.
+We scaled the data to [0,1] and the accuracy is \textcolor{red}{36\%}
+}
+
+\item Answer:
+
+{\tt OK. Send me the data.}
+
+\item Answer:
+
+{\tt I am able to give \textcolor{red}{83.88\%} cv accuracy. 
+ Is that good enough for you ? }
+
+\item User 2:
+
+{\tt 83.88\% accuracy would be excellent...}
+
+\end{itemize}
+
+The keys to successful application of SVM are 
+data preprocessing and model selection. 
+We discuss them in detail in the following 
+sections.
+
+\section{Data Preprocessing}
+
+SVM requires each instance of data to be represented
+as a vector of real numbers. So if you have categorical
+attributes in your data, you first have to convert 
+them into numerical data. We recommend using N numbers to 
+represent an N-category attribute. Only one of the N
+numbers are 1, other are zero. For example if you have
+a 3-category attribute, you can represent them as (0,0,1),
+(0,1,0), and (1,0,0).
+
+\subsection{Feature Selection}
+
+Despite people usually claim SVM is free of 
+"curse of dimensionality", it is still bad to 
+have too many features which are not predictive, 
+especially when the number of instance in the
+data set are small. If you have thousands of
+features, chances are you have to choose a 
+subset of them before give the data to SVM.
+We don't have a good approach to feature 
+selection yet.
+
+\subsection{Scaling}
+
+Scaling is very important and has to be done 
+before applying SVM to get good result. The 
+main reason is to avoid attributes which have 
+large numerical range dominate those have 
+small numeric range. Another reason is to 
+avoid numerical difficuly in the computation. 
+We recommend scale each attribute to 
+$[-1,+1]$ or $[0,1]$.
+
+Of course you have to use the same method to 
+scale test data before testing.
+
+\section{Model Selection}
+
+There are many proposed kernel functions for 
+SVM. In our experience the RBF kernel is the 
+most useful one. There are two parameters
+for the RBF kernel, $C$ and $\gamma$. It 
+is not known beforehand which $C$ and $\gamma$
+values are best for one problem, so some kind of
+model selection (parameter search) must be done. 
+
+We recommend doing a "grid-search" on $C$ and
+$\gamma$. Basically many pairs of $(C,\gamma)$ 
+are tried and the cross-validation accuracy are 
+compared to get the best $(C,\gamma)$.
+
+\section{Conclusion}
+
+\end{document}
