@@ -150,11 +150,17 @@ We propose that beginners try the following procedure first:
 \item Consider the RBF kernel $K(x,y)=e^{-\gamma\|x-y\|^2}$ 
 \item Use cross-validation to find the best parameter
       $C$ and $\gamma$
-\item Use the best parameter $C$ and $\gamma$ to train the whole training set
+\item Use the best parameter $C$ and $\gamma$ to train the 
+whole training set\footnotemark[5]
 \item Test
 \end{itemize}
 We discuss this procedure in detail in the following 
 sections.
+
+\footnotetext[5]{The best parameter might be affected by 
+the size of data set but in practice the difference 
+between the best parameter of the whole training set
+and one obtained from cross-validation is satifactory.}
 
 \section{Data Preprocessing}
 
