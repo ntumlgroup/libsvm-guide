@@ -2,72 +2,69 @@
 \usepackage{color}
 
 \title{A Practical Guide to Support Vector Machines}
+\author{Chih-Jen Lin, Chih-Chung Chang}
 
-\begin{document}
+\begin{document} 
+\maketitle
 
 \section{Introduction}
 
 SVM (Support Vector Machines) is a newer technique for data
 classification and regression. However, people who are not 
 familiar with SVM almost always get unsatisfactory result 
-at first. Here we provide a "cookbook" approach which usually 
+at first. Here we propose a "cookbook" approach which usually 
 gives reasonable result.
 
-\section{Real World Examples}
+\subsection{Real World Examples}
 
+Here are some real world examples. These datasets are
+tried first by our users, then our procedure is used
+on these datasets. As can be seen from the following 
+table, the procedure can achieve better performance.
+
+\vspace{0.5cm}
+\begin{tabular}{l|l|l}
+Application area & Accuracy before & Accuracy after \\
+\hline
+
+astroparticle physics \footnotemark[1] & 75.2\% & 97.3\% \\
+
+bioinformatics \footnotemark[2] & 36\% & 83.88\% \\
+
+comparison with neural net \footnotemark[3] & 4.88\% & 87.8\% \\
+
+\end{tabular}
+
+\footnotetext[1]{Courtesy of Jan Conrad ({\tt conrad@unix.tsl.uu.se}).}
+% /home/professor/cjlin/software/svm/svmguide/conrad
+\footnotetext[2]{???}
+\footnotetext[3]{Courtesy of Berend Kapelle ({\tt berend.kapelle@gmx.de}).}
+% http://www.kernel-machines.org/blackboard/messages/860.html
+% http://berend.gmxhome.de/train_n.dat
+% http://berend.gmxhome.de/test_n.dat
+
+\vspace{0.5cm}
+These datasets are available in {\tt http://www.csie.ntu.edu.tw/\~\/cjlin/...}
+
+\subsection{Proposed Procedure}
+
+Many users are doing the following procedure now:
 \begin{itemize}
-\item User 1:
-
-{\tt 
-I am using libsvm in a astroparticle physics application (AMANDA
-experiment). First, let me congratulate you to a really easy to
-use and nice package.
-
-Unfortunately, it gives me astonishingly bad results...
-I did ...this... and the accuracy = 75.2\%
-}
-
-\item Answer:
-
-{\tt OK. Send me the data.}
-
-\item Answer:
-
-{\tt I did ...that... and the accuracy = 97.3\% }
-
-\item User 1:
-
-{\tt You earned a copy of my PhD thesis. }
-
-\item User 2:
-
-{\tt
-I am a developer in a bioinformatics laboratory at ...
-We would like to use LIBSVM in a project ...
-The datasets are reasonable unbalanced - there are 221 examples in the
-first set, 117 in the second set and 53 in the third set.
-
-But results not good.
-We scaled the data to [0,1] and the accuracy is \textcolor{red}{36\%}
-}
-
-\item Answer:
-
-{\tt OK. Send me the data.}
-
-\item Answer:
-
-{\tt I am able to give \textcolor{red}{83.88\%} cv accuracy. 
- Is that good enough for you ? }
-
-\item User 2:
-
-{\tt 83.88\% accuracy would be excellent...}
-
+\item Transform data to the format of an SVM software
+\item Randomly try a few kernels and parameters
+\item Test
 \end{itemize}
 
-The keys to successful application of SVM are 
-data preprocessing and model selection. 
+We propose this procedure instead:
+\begin{itemize}
+\item Transform data to the format of an SVM software
+\item Simple scaling on the data
+\item Consider the RBF kernel $k(x,y)=e^{-\gamma|x-y|^2}$ 
+\item Use cross-validation to find the best parameter
+      $C$ and $\gamma$ systematically.
+\item Test
+\end{itemize}
+
 We discuss them in detail in the following 
 sections.
 
@@ -76,23 +73,11 @@ sections.
 A dataset consists of some data instances. Each
 instance has one "target value" and a number of
 "attributes." In classification, the target value 
-is the class of the instance ; in regression, 
+is the class of the instance; in regression, 
 the target is the function value.
 
 The goal of SVM is to produce a model which 
 predicts target value given the attributes.
-
-\subsection{Feature Selection}
-
-Despite people usually claim SVM is free of 
-"curse of dimensionality", it is still bad to 
-have too many attributes which are not predictive, 
-especially when the number of instance in the
-data set are small. If you have thousands of
-attributes, chances are you have to choose a 
-subset of them before giving the data to SVM.
-We don't have a good approach to feature 
-selection yet.
 
 \subsection{Categorical Feature}
 
@@ -111,6 +96,11 @@ categorical attribute.
 
 Numeric attributes can be used as is, but
 scaling them before applying SVM is very important.
+
+example: heart, first 5 rows ... 
+performance comparison.
+refer to NN FAQ
+
 The main reason is to avoid attributes which have 
 greater numeric range dominate those have 
 smaller numeric range. Another reason is to 
@@ -123,13 +113,25 @@ scale test data before testing.
 
 \section{Model Selection}
 
+\subsection{RBF kernel}
 There are many proposed kernel functions for 
 SVM. In our experience the RBF kernel is the 
-most useful one. There are two parameters
-for the RBF kernel, $C$ and $\gamma$. It 
-is not known beforehand which $C$ and $\gamma$
-values are best for one problem, so some kind of
-model selection (parameter search) must be done. 
+most useful one. Other common kernels include:
+
+\begin{itemize}
+\item linear: a special case of RBF [Keerthi and Lin 2003]
+\item polynomial: easily cause numerical difficulties
+$(<1)^d \rightarrow 0, (>1)^d \rightarrow \infty$
+\item sigmoid:  for certain parameters, it behaves like RBF [Lin and Lin 2003]
+\end{itemize}
+
+\subsection{Grid Search}
+There are two parameters need to be considered 
+while using RBF kernel ---  $C$ and $\gamma$. 
+It is not known beforehand  which $C$ and 
+$\gamma$ values are best for one problem, 
+so some kind of model selection 
+(parameter search) must be done. 
 
 We recommend doing a "grid-search" on $C$ and
 $\gamma$. Basically pairs of $(C,\gamma)$ are tried 
@@ -140,6 +142,16 @@ can give a good picture where good parameters lie.
 (for example, $C=2^{-6},2^{-5},...,2^{14}$, 
 $\gamma=2^{-14},2^{-13},...,2^4$)
 
+figure.
+
+Doing grid search is time-consuming, 
+so we recommend using a coarse grid first. 
+After identifying a "better" region on the
+grid, a finer grid search on that region can 
+be conducted.
+
+figure.
+
 The above approach works well for small-to-medium 
 sized dataset. For larger dataset, the time for
 doing a complete "grid-search" may be prohibitive.
@@ -148,6 +160,16 @@ a subset of the dataset, doing "grid-search" on
 them, then using the best parameters to train
 the complete dataset.
 
-\section{Conclusion}
+\section{Discussion}
+
+Despite people usually claim SVM is free of 
+"curse of dimensionality", it is still bad to 
+have too many attributes which are not predictive, 
+especially when the number of instance in the
+data set are small. If you have thousands of
+attributes, chances are you have to choose a 
+subset of them before giving the data to SVM.
+We don't have a good approach to feature 
+selection yet.
 
 \end{document}
