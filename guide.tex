@@ -471,7 +471,7 @@ Accuracy = 96.875% (3875/4000) (classification)\end{alltt}
  \(\rightarrow\) Cross Validation Accuracy = 56.5217%\end{alltt}
 
 \item Scaled sets with default parameters
-\begin{alltt}\$./svm-scale -l 1 -u -1 train.2 > train.2.scale
+\begin{alltt}\$./svm-scale -l -1 -u 1 train.2 > train.2.scale
 \$./svm-train -v 5 train.2.scale
  \(\rightarrow\) Cross Validation Accuracy = 78.5166%\end{alltt}
 
@@ -498,7 +498,7 @@ Training...\end{alltt}
  \(\rightarrow\) Accuracy = 2.43902%\end{alltt}
 
 \item Scaled sets with default parameters
-\begin{alltt}\$./svm-scale -l 1 -u -1 -s range3 train.3 > train.3.scale
+\begin{alltt}\$./svm-scale -l -1 -u 1 -s range3 train.3 > train.3.scale
 \$./svm-scale -r range3 test.3 > test.3.scale
 \$./svm-train train.3.scale
 \$./svm-predict test.3.scale train.3.scale.model test.3.predict
