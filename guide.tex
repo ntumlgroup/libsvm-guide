@@ -1,5 +1,5 @@
 \documentclass[12pt]{article}
-\usepackage{hyperref,hyperlatex,url,color,../../chicago,alltt,epsfig,subfigure,pifont}
+\usepackage{amsmath,hyperref,hyperlatex,url,color,../../chicago,alltt,epsfig,subfigure,pifont}
 \setlength{\textwidth}{6.0in}
 \setlength{\oddsidemargin}{23pt}
 \setlength{\evensidemargin}{23pt}
@@ -7,7 +7,10 @@
 \setlength{\textheight}{8.8in}
 \newcommand{\libsvm}{$\mbox{\href{http://www.csie.ntu.edu.tw/~cjlin/libsvm}{\sf LIBSVM }}$}
 \newcommand{\bsvm}{$\mbox{\href{http://www.csie.ntu.edu.tw/~cjlin/bsvm}{\sf BSVM }}$}
-
+\def\bw{{\bf w}}
+\def\bx{{\bf x}}
+\def\by{{\bf y}}
+\newcommand{\bxi}{{\boldsymbol{\xi}}}
 \begin{document}
 \setlength{\baselineskip}{18pt}
 \begin{center}
@@ -24,7 +27,6 @@ Information Engineering \\
 National Taiwan University \\
 Taipei 106, Taiwan (\href{mailto:cjlin@csie.ntu.edu.tw}
 {cjlin@csie.ntu.edu.tw})
-
 \end{center}
 \medskip
 
@@ -36,7 +38,7 @@ classification. However, beginners who
 are not familiar with SVM often get 
 unsatisfactory results since they miss some easy but 
 significant steps. In this guide, we propose a 
-simple procedure which usually gives reasonable results. 
+simple procedure, which usually gives reasonable results. 
 \end{abstract}
 
 \section{Introduction}
@@ -67,37 +69,37 @@ predicts target value of data instances in the testing
 set which are given only the attributes.
 
 Given a training set of
-instance-label pairs  $(x_i,y_i), i = 1, \ldots, l$
-where $x_i \in R^n$ and $y \in
+instance-label pairs  $(\bx_i,y_i), i = 1, \ldots, l$
+where $\bx_i \in R^n$ and $\by \in
 \{1, -1 \}^l$,
 the support vector machines (SVM)
 \cite{BB92a,CC95a} require
 the solution of the following optimization
 problem:
  \begin{eqnarray}
-\min_{w,b,\xi} && \frac{1}{2}w^T w + C \sum_{i=1}^l \xi_i
+\min_{\bw,b,\bxi} && \frac{1}{2}\bw^T \bw + C \sum_{i=1}^l \xi_i
 \nonumber \\
-\mbox{subject to}&& y_i(w^T \phi(x_i) + b) \geq 1 - \xi_i,\label{svml1}\\
+\mbox{subject to}&& y_i(\bw^T \phi(\bx_i) + b) \geq 1 - \xi_i,\label{svml1}\\
 && \xi_i \geq 0. \nonumber
 \end{eqnarray}
-Here training vectors $x_i$ are mapped into a
+Here training vectors $\bx_i$ are mapped into a
 higher (maybe infinite) dimensional space
 by the function $\phi$.
 Then SVM finds a linear separating hyperplane
 with the maximal margin in this
 higher dimensional space.
 $C>0$ is the penalty parameter of
-the error term. Furthermore, $K(x_i, x_j) \equiv 
-\phi(x_i)^T\phi(x_j)$ is called the kernel function.
+the error term. Furthermore, $K(\bx_i, \bx_j) \equiv 
+\phi(\bx_i)^T\phi(\bx_j)$ is called the kernel function.
 Though new kernels are being proposed by researchers, 
 beginners may find in SVM books the following four
 basic kernels:
 \begin{itemize}
-\item linear: $K(x_i, x_j) = x_i ^T x_j$.
-\item polynomial: $K(x_i, x_j) = (\gamma {x_i}^T x_j + r)^d$, $\gamma > 0$.
-\item radial basis function (RBF): $K(x_i, x_j) = 
-\exp(-\gamma{\|x_i-x_j\|}^2)$, $\gamma > 0$.
-\item sigmoid: $K(x_i, x_j) = \tanh(\gamma {x_i}^T x_j + r)$.
+\item linear: $K(\bx_i, \bx_j) = \bx_i ^T \bx_j$.
+\item polynomial: $K(\bx_i, \bx_j) = (\gamma {\bx_i}^T \bx_j + r)^d$, $\gamma > 0$.
+\item radial basis function (RBF): $K(\bx_i, \bx_j) = 
+\exp(-\gamma{\|\bx_i-\bx_j\|}^2)$, $\gamma > 0$.
+\item sigmoid: $K(\bx_i, \bx_j) = \tanh(\gamma {\bx_i}^T \bx_j + r)$.
 \end{itemize}
 Here, $\gamma$, $r$, and $d$ are kernel parameters.
 
@@ -147,7 +149,7 @@ We propose that beginners try the following procedure first:
 \begin{itemize}
 \item Transform data to the format of an SVM software
 \item Conduct simple scaling on the data
-\item Consider the RBF kernel $K(x,y)=e^{-\gamma\|x-y\|^2}$ 
+\item Consider the RBF kernel $K(\bx,\by)=e^{-\gamma\|\bx-\by\|^2}$ 
 \item Use cross-validation to find the best parameter
       $C$ and $\gamma$
 \item Use the best parameter $C$ and $\gamma$ to train the 
@@ -203,10 +205,10 @@ the range $[-1,+1]$ or $[0,1]$.
 Of course we have to use the same method to 
 scale testing data before testing. For example, 
 suppose that we scaled the first attribute 
-of training data from [-10, +10] to [-1, +1]. 
+of training data from $[-10, +10]$ to $[-1, +1]$. 
 If the first attribute of testing
-data is lying in the range [-11, +8], we must 
-scale the testing data to [-1.1, +0.8].
+data is lying in the range $[-11, +8]$, we must 
+scale the testing data to $[-1.1, +0.8]$.
 
 \section{Model Selection}
 Though there are only four common kernels 
@@ -238,8 +240,8 @@ than the RBF kernel.
 Finally, the RBF kernel has less numerical difficulties.
 One key point is $0 < K_{ij} \leq 1$ in contrast to 
 polynomial kernels of which kernel values may go to 
-infinity ($\gamma {x_i}^T x_j + r > 1$) or zero 
-($\gamma {x_i}^T x_j + r < 1$) while the degree is large.
+infinity ($\gamma {\bx_i}^T \bx_j + r > 1$) or zero 
+($\gamma {\bx_i}^T \bx_j + r < 1$) while the degree is large.
 Moreover, we must note that the sigmoid kernel is  
 not valid (i.e. not the inner product of two vectors) 
 under some parameters \cite{VV95a}.
