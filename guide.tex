@@ -1,12 +1,14 @@
 \documentclass[12pt]{article}
-\usepackage{amsmath,hyperref,hyperlatex,url,color,../../chicago,alltt,epsfig,subfigure,pifont}
+\usepackage{amsmath,hyperref,url,color,../../chicago,alltt,epsfig,subfigure,pifont,xspace}
 \setlength{\textwidth}{6.0in}
 \setlength{\oddsidemargin}{23pt}
 \setlength{\evensidemargin}{23pt}
 \setlength{\topmargin}{-0.5in}
 \setlength{\textheight}{8.8in}
-\newcommand{\libsvm}{$\mbox{\href{http://www.csie.ntu.edu.tw/~cjlin/libsvm}{\sf LIBSVM }}$}
-\newcommand{\bsvm}{$\mbox{\href{http://www.csie.ntu.edu.tw/~cjlin/bsvm}{\sf BSVM }}$}
+\newcommand{\libsvm}{$\mbox{\href{http://www.csie.ntu.edu.tw/~cjlin/libsvm}{\sf LIBSVM}}$\xspace}
+\newcommand{\bsvm}{$\mbox{{\sf BSVM}}$}
+\newcommand{\liblinear}{$\mbox{{\sf LIBLINEAR}}$}
+\def\real{{\sf real-sim}\xspace} 
 \def\bw{{\bf w}}
 \def\bx{{\bf x}}
 \def\by{{\bf y}}
@@ -217,6 +219,7 @@ which one to try first. Then the penalty parameter
 $C$ and kernel parameters are chosen.
 
 \subsection{RBF Kernel}
+\label{sec:rbf-kernel}
 We suggest that in 
 general RBF is a reasonable first choice.
 The RBF kernel nonlinearly maps 
@@ -245,6 +248,14 @@ infinity ($\gamma {\bx_i}^T \bx_j + r > 1$) or zero
 Moreover, we must note that the sigmoid kernel is  
 not valid (i.e. not the inner product of two vectors) 
 under some parameters \cite{VV95a}.
+
+
+However, there are some situations where the
+RBF kernel is not suitable. In particular, 
+when the number of features is very large,
+one may just use the linear kernel. We 
+discuss details in Appendix
+\ref{sec:when-use-linear}.
 
 \subsection{Cross-validation and Grid-search}
 \label{cross}
@@ -528,6 +539,63 @@ Accuracy = 87.8049% (36/41) (classification)\end{alltt}
 \end{itemize}
 \end{itemize}
 
+\section{When to Use Linear but not
+RBF kernel}
+\label{sec:when-use-linear}
+
+If the number of features is large, one may
+not need to map data to a higher dimensional
+space. That is, the testing accuracy may not 
+increase after the nonlinear mapping.
+Hence, using the linear kernel is good
+enough, and one only searchers for the parameter
+$C$. While Section \ref{sec:rbf-kernel}
+describes that RBF is at least as good as linear,
+the statement is true only
+after searching the $(C, \gamma)$ space.
+
+Next, we split our discussion two parts:
+
+\begin{itemize}
+\item[Case 1:] Number of instance $\ll$ number of features
+
+  Many microarray data in binformatics are of this type. We consider
+  the Leukemia data from \libsvm data sets
+  (\url{http://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets}). The
+  training set has 38 instances and the testing set has 34. The number
+  of features is much larger: 7,129. We merge the two files and
+  compare the cross validation accuracy of using the RBF and the
+  linear kernels:
+
+  \begin{itemize}
+  \item RBF kernel with parameter selection
+    \begin{alltt}\$cat leu leu.t > leu.combined \$python grid.py
+      leu.combined \(\cdots\) 8.0 3.0517578125e-05 97.2222\end{alltt}
+    (Best $C$=8.0, $\gamma=0.000030518$ with five-fold
+    cross-validation rate=97.2222\%)
+
+  \item Linear kernel with parameter selection
+    \begin{alltt}\$python grid.py -log2c -1,2,1 -log2g 1,1,1 -t 0
+      leu.combined \(\cdots\) 0.5 2.0 98.6111\end{alltt} (Best $C$=0.5
+    with five-fold cross-validation rate=98.61111\%)
+
+    Though {\tt grid.py} was designed for the RBF kernel, the above
+    way checks variouse $C$ with the linear kernel ({\tt -log2g 1,1,1}
+    sets a dummy $\gamma$).
+  \end{itemize}
+  Clearly, using the linear kernel achieves comparable accuracy to the
+  RBF kernel.
+
+\item[Case 2:] Both number of instances and features are
+  large
+
+  Such data often occur in document classification. \libsvm is not
+  good for this type of problems. Fortunately, we have another
+  software \liblinear, which is very suitable for such data. We
+  illustrate the difference between \libsvm and \liblinear using a
+  document set \real from \libsvm data sets
+  (\url{http://www.csie.ntu.edu.tw/~cjlin/})
+\end{itemize}
 \bibliographystyle{../../chicago}
 \bibliography{../../sdp}
 \end{document}
