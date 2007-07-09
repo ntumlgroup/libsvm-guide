@@ -556,8 +556,7 @@ after searching the $(C, \gamma)$ space.
 
 Next, we split our discussion two parts:
 
-\begin{itemize}
-\item[Case 1:] Number of instance $\ll$ number of features
+\noindent{\bf Case 1:} Number of instance $\ll$ number of features
 
   Many microarray data in binformatics are of this type. We consider
   the Leukemia data from \libsvm data sets
@@ -586,16 +585,22 @@ Next, we split our discussion two parts:
   Clearly, using the linear kernel achieves comparable accuracy to the
   RBF kernel.
 
-\item[Case 2:] Both number of instances and features are
+\medskip
+
+\noindent{\bf Case 2:} Both number of instances and features are
   large
 
   Such data often occur in document classification. \libsvm is not
   good for this type of problems. Fortunately, we have another
   software \liblinear, which is very suitable for such data. We
   illustrate the difference between \libsvm and \liblinear using a
-  document set \real from \libsvm data sets
-  (\url{http://www.csie.ntu.edu.tw/~cjlin/})
-\end{itemize}
+  document problem
+{\tt rcv1.binary} from \libsvm data sets.
+\begin{alltt}$time libsvm-2.84/svm-train -c 0.25 -t 0 -e 0.1 -m 800 rcv1_train.binary
+115.327s
+$ time liblinear-1.1/train -c 0.25 -e 0.01 rcv1_train.binary
+3.396s\end{alltt}
+
 \bibliographystyle{../../chicago}
 \bibliography{../../sdp}
 \end{document}
