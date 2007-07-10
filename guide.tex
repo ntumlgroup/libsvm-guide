@@ -8,7 +8,6 @@
 \newcommand{\libsvm}{$\mbox{\href{http://www.csie.ntu.edu.tw/~cjlin/libsvm}{\sf LIBSVM}}$\xspace}
 \newcommand{\bsvm}{$\mbox{{\sf BSVM}}$\xspace}
 \newcommand{\liblinear}{$\mbox{\href{http://www.csie.ntu.edu.tw/~cjlin/liblinear}{\sf LIBLINEAR}}$\xspace}
-\def\real{{\sf real-sim}\xspace} 
 \def\bw{{\bf w}}
 \def\bx{{\bf x}}
 \def\by{{\bf y}}
@@ -599,16 +598,22 @@ $python grid.py leu.combined
 
   Such data often occur in document classification. \libsvm is not
 particularly good for this type of problems. Fortunately, we have another
-  software \liblinear, which is very suitable for such data. We
+  software \liblinear \cite{CJL07a}, which is very suitable for such data. We
   illustrate the difference between \libsvm and \liblinear using a
   document problem
 {\tt rcv1.binary} from the \libsvm data sets.
+The numbers of instances and features are
+20,242 and 47,236, respectively.
 \begin{alltt}$time libsvm-2.84/svm-train -c 0.25 -t 0 -e 0.1 -m 800 rcv1_train.binary
 115.327s
 $ time liblinear-1.1/train -c 0.25 -e 0.01 rcv1_train.binary
 3.396s\end{alltt}
 \libsvm takes around 115 seconds, but
-\liblinear uses only 3.
+\liblinear uses only 3. Moreover,
+\libsvm consumes more memory as we
+allocate some spaces to store
+recently used kernel elements
+(see {\tt -m 800}).
 While these two packages differ
 in several aspects and the comparison
 is not fair,
