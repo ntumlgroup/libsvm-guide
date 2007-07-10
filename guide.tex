@@ -604,15 +604,16 @@ particularly good for this type of problems. Fortunately, we have another
 {\tt rcv1.binary} from the \libsvm data sets.
 The numbers of instances and features are
 20,242 and 47,236, respectively.
-\begin{alltt}$ time libsvm-2.84/svm-train -c 0.25 -t 0 -e 0.1 -m 800 -v 5 rcv1_train.binary
-Cross Validation Accuracy = 96.6604%
-608.042s
-$ time liblinear-1.1/train -c 1 -e 0.01 rcv1_train.binary
-Cross Validation Accuracy = 96.4579%
-5.952s\end{alltt}
+\begin{alltt}$ time libsvm-2.84/svm-train -c 4 -t 0 -e 0.1 -m 800 -v 5 rcv1_train.binary
+Cross Validation Accuracy = 96.8136%
+419.458s
+$ time liblinear-1.1/train -c 4 -e 0.01 rcv1_train.binary
+Cross Validation Accuracy = 96.9025%
+5.388s
+\end{alltt}
 For five-fold cross validation,
-\libsvm takes around 600 seconds, but
-\liblinear uses only 6. Moreover,
+\libsvm takes around 400 seconds, but
+\liblinear uses only 5. Moreover,
 \libsvm consumes more memory as we
 allocate some spaces to store
 recently used kernel elements
