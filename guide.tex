@@ -607,7 +607,7 @@ The numbers of instances and features are
 \begin{alltt}$ time libsvm-2.84/svm-train -c 4 -t 0 -e 0.1 -m 800 -v 5 rcv1_train.binary
 Cross Validation Accuracy = 96.8136%
 419.458s
-$ time liblinear-1.1/train -c 4 -e 0.01 rcv1_train.binary
+$ time liblinear-1.1/train -c 4 -e 0.01 -v 5 rcv1_train.binary
 Cross Validation Accuracy = 96.9025%
 5.388s
 \end{alltt}
