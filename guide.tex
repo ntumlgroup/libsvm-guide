@@ -553,9 +553,9 @@ describes that RBF is at least as good as linear,
 the statement is true only
 after searching the $(C, \gamma)$ space.
 
-Next, we split our discussion to two parts:
+Next, we split our discussion to three parts:
 
-\noindent{\bf Case 1:} Number of instance $\ll$ number of features
+\noindent{\bf Case 1:} Number of instances $\ll$ number of features
 
   Many microarray data in bioinformatics are of this type. We consider
   the Leukemia data from \libsvm data sets
@@ -588,8 +588,10 @@ $ python grid.py leu.combined
     way checks various $C$ using the linear kernel ({\tt -log2g 1,1,1}
     sets a dummy $\gamma$).
   \end{itemize}
-  Clearly, the cross-validation accuracy using the linear kernel is comparable to that using the
-  RBF kernel.
+The cross-validation accuracy of using the linear kernel is comparable to that of using the
+  RBF kernel. Apparently, when the number of
+features is
+very large, one may not need to map the data.
 
 \medskip
 
@@ -601,30 +603,69 @@ particularly good for this type of problems. Fortunately, we have another
   software \liblinear \cite{CJL07a}, which is very suitable for such data. We
   illustrate the difference between \libsvm and \liblinear using a
   document problem
-{\tt rcv1.binary} from the \libsvm data sets.
+{\tt rcv1\_train.binary} from the \libsvm data sets.
 The numbers of instances and features are
 20,242 and 47,236, respectively.
-\begin{alltt}$ time libsvm-2.84/svm-train -c 4 -t 0 -e 0.1 -m 800 -v 5 rcv1_train.binary
+\begin{alltt}$ time libsvm-2.85/svm-train -c 4 -t 0 -e 0.1 -m 800 -v 5 rcv1_train.binary
 Cross Validation Accuracy = 96.8136%
-419.458s
-$ time liblinear-1.1/train -c 4 -e 0.01 -v 5 rcv1_train.binary
-Cross Validation Accuracy = 96.9025%
-5.388s
+345.569s
+$ time liblinear-1.21/train -c 4 -e 0.1 -v 5 rcv1_train.binary
+Cross Validation Accuracy = 97.0161%
+2.944s
 \end{alltt}
 For five-fold cross validation,
-\libsvm takes around 400 seconds, but
-\liblinear uses only 5. Moreover,
+\libsvm takes around 350 seconds, but
+\liblinear uses only 3. Moreover,
 \libsvm consumes more memory as we
 allocate some spaces to store
 recently used kernel elements
 (see {\tt -m 800}).
-While these two packages differ
-in several aspects,
+Clearly,
 \liblinear is much faster
 than \libsvm to obtain a model with
 comparable accuracy.
 
+\liblinear is efficient for large-scale
+document classification. Let's consider a large
+set {\tt 
+rcv1\_test.binary} with
+677,399 instances.
+\begin{alltt}$ time liblinear-1.21/train -c 0.25 -v 5 rcv1_test.binary 
+Cross Validation Accuracy = 97.8538\%
+68.84s
+\end{alltt}
+Note that reading the data takes most of the time.
+The training of each training/validation
+split is {\em less than four seconds}.
+
+\noindent{\bf Case 3:} Number of instances $\gg$ number of features.
+
+As the number of features is small, one often
+maps data to {\em higeher dimensional spaces}
+(i.e., using nonlinear kernels).
+However, if you really would like to use the
+linear kernel, you may use \liblinear
+with the option 
+{\tt -s 2}.
+When the number of features is small, it is often faster than 
+the default {\tt -s 1}.
+Consider the data
+\url{http://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/binary/covtype.libsvm.binary.scale.bz2}.
+The number of instances
+581,012 is much larger than the number of
+features 54.
+We run \liblinear with {\tt -s 1} (default)
+and {\tt -s 2}.
+\begin{alltt}$ time liblinear-1.21/train -c 4 -v 5 -s 2 covtype.libsvm.binary.scale 
+Cross Validation Accuracy = 75.67\%
+67.224s
+$ time liblinear-1.21/train -c 4 -v 5 -s 1 covtype.libsvm.binary.scale 
+Cross Validation Accuracy = 75.6711\%
+452.736s
+\end{alltt}
+Clearly, using {\tt -s 2} leads to shorter training
+time.
+
 \bibliographystyle{../../chicago}
 \bibliography{../../sdp}
 \end{document}
-
