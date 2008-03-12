@@ -546,7 +546,7 @@ not need to map data to a higher dimensional
 space. That is, 
 the nonlinear mapping does not improve
 the performance.
-Hence, using the linear kernel is good
+Using the linear kernel is good
 enough, and one only searches for the parameter
 $C$. While Section \ref{sec:rbf-kernel}
 describes that RBF is at least as good as linear,
@@ -555,7 +555,7 @@ after searching the $(C, \gamma)$ space.
 
 Next, we split our discussion to three parts:
 
-\noindent{\bf Case 1:} Number of instances $\ll$ number of features
+\subsection{Number of instances $\ll$ number of features}
 
   Many microarray data in bioinformatics are of this type. We consider
   the Leukemia data from \libsvm data sets
@@ -593,10 +593,12 @@ The cross-validation accuracy of using the linear kernel is comparable to that o
 features is
 very large, one may not need to map the data.
 
-\medskip
+In addition to \libsvm, the \liblinear software
+mentioned below is also effective for
+data in this case.
 
-\noindent{\bf Case 2:} Both numbers of instances and features are
-  large.
+\subsection{Both numbers of instances and features are
+  large}
 
   Such data often occur in document classification. \libsvm is not
 particularly good for this type of problems. Fortunately, we have another
@@ -626,7 +628,7 @@ than \libsvm to obtain a model with
 comparable accuracy.
 
 \liblinear is efficient for large-scale
-document classification. Let's consider a large
+document classification. Let us consider a large
 set {\tt 
 rcv1\_test.binary} with
 677,399 instances.
@@ -638,10 +640,10 @@ Note that reading the data takes most of the time.
 The training of each training/validation
 split is {\em less than four seconds}.
 
-\noindent{\bf Case 3:} Number of instances $\gg$ number of features.
+\subsection{Number of instances $\gg$ number of features}
 
 As the number of features is small, one often
-maps data to {\em higeher dimensional spaces}
+maps data to {\em higher dimensional spaces}
 (i.e., using nonlinear kernels).
 However, if you really would like to use the
 linear kernel, you may use \liblinear
