@@ -1,5 +1,6 @@
 \documentclass[12pt]{article}
-\usepackage{xspace,amsmath,hyperref,url,color,../../chicago,alltt,epsfig,subfigure,pifont}
+\usepackage{xspace,amsmath,hyperref,url,color,alltt,epsfig,subfigure,pifont}
+\usepackage[round,authoryear]{natbib}
 \setlength{\textwidth}{6.0in}
 \setlength{\oddsidemargin}{23pt}
 \setlength{\evensidemargin}{23pt}
@@ -73,7 +74,7 @@ instance-label pairs  $(\bx_i,y_i), i = 1, \ldots, l$
 where $\bx_i \in R^n$ and $\by \in
 \{1, -1 \}^l$,
 the support vector machines (SVM)
-\cite{BB92a,CC95a} require
+\citep{BB92a,CC95a} require
 the solution of the following optimization
 problem:
  \begin{eqnarray}
@@ -129,7 +130,7 @@ Vehicle\footnotemark[3] & 1,243 & 41 & 21 & 2 & 4.88\% & 87.8\%
 
 \footnotetext[1]{Courtesy of Jan Conrad from Uppsala University, Sweden.}
 \footnotetext[2]{Courtesy of Cory Spencer from Simon Fraser University,
-Canada \shortcite{JLG03a}.}
+Canada \citep{JLG03a}.}
 \footnotetext[3]{Courtesy of a user from Germany.}
 \footnotetext[4]{As there are no testing data, cross-validation instead
 of testing accuracy is presented here. Details of cross-validation are 
@@ -141,13 +142,13 @@ These data sets are at \url{http://www.csie.ntu.edu.tw/~cjlin/papers/guide/data/
 
 Many beginners use the following procedure now:
 \begin{itemize}
-\item Transform data to the format of an SVM software
+\item Transform data to the format of an SVM package
 \item Randomly try a few kernels and parameters
 \item Test
 \end{itemize}
 We propose that beginners try the following procedure first:
 \begin{itemize}
-\item Transform data to the format of an SVM software
+\item Transform data to the format of an SVM package
 \item Conduct simple scaling on the data
 \item Consider the RBF kernel $K(\bx,\by)=e^{-\gamma\|\bx-\by\|^2}$ 
 \item Use cross-validation to find the best parameter
@@ -186,8 +187,10 @@ categorical attribute.
 \label{scaling}
 
 Scaling them before applying SVM is very important.
+In 
 \href{ftp://ftp.sas.com/pub/neural/FAQ.html}
-{\cite[Part 2 of Neural Networks FAQ]{NN01a}} explains why we scale 
+{Part 2 of Neural Networks FAQ},
+\cite{NN01a} explains why we scale 
 data while using Neural Networks, and most 
 of considerations also apply to SVM. 
 
@@ -226,12 +229,12 @@ unlike the linear kernel, can handle the case when
 the relation between class labels and 
 attributes is nonlinear. Furthermore, the
 linear kernel is a special case
-of RBF as \cite{SSK02b} shows that the linear kernel 
+of RBF as \cite{SSK02b} show that the linear kernel 
 with a penalty parameter $\tilde{C}$ has the same performance
 as the RBF kernel with some parameters $(C, \gamma)$. In
 addition, the sigmoid 
 kernel behaves like RBF for certain parameters
-\cite{HTL03a}.
+\citep{HTL03a}.
 
 The second reason is the number of hyperparameters
 which influences the complexity of model selection.
@@ -245,7 +248,7 @@ infinity ($\gamma {\bx_i}^T \bx_j + r > 1$) or zero
 ($\gamma {\bx_i}^T \bx_j + r < 1$) while the degree is large.
 Moreover, we must note that the sigmoid kernel is  
 not valid (i.e. not the inner product of two vectors) 
-under some parameters \cite{VV95a}.
+under some parameters \citep{VV95a}.
 
 
 However, there are some situations where the
@@ -269,7 +272,7 @@ Note that it may not be useful to achieve high
 training accuracy (i.e., classifiers accurately 
 predict training data whose class labels are indeed 
 known). Therefore, a common way is to separate 
-training data to two parts of which one is considered
+training data into two parts of which one is considered
 unknown in training the classifier. Then the prediction
 accuracy on this set can more precisely reflect the
 performance on classifying unknown data. An improved version of
@@ -383,7 +386,7 @@ grid, a finer grid search on that region can
 be conducted. To illustrate this, we do an experiment on the problem
 \href{http://www.csie.ntu.edu.tw/~cjlin/libsvmtools/binary/german.numer_scale}{{\sf german}} from the 
 \href{http://www.ncc.up.pt/liacc/ML/statlog/datasets.html}{Statlog} 
-collection \cite{DM94a}. After scaling this set,
+collection \citep{DM94a}. After scaling this set,
 we first use a coarse grid (Figure \ref{coarser}) and find that
 the best $(C, \gamma)$ is $(2^3, 2^{-5})$ with the cross-validation rate 77.5\%.
 Next we conduct a finer grid search on the neighborhood 
@@ -425,7 +428,7 @@ In this appendix, we compare accuracy
 by the proposed procedure with that by general beginners.
 Experiments are on the three problems mentioned in
 Table \ref{accuracy} by using the software \libsvm
-\cite{CC01a}. For each problem, we first list the
+\citep{CC01a}. For each problem, we first list the
 accuracy by direct training and testing. Secondly, we show 
 the difference in accuracy with and without scaling.
 From what has been discussed in Section \ref{scaling},
@@ -455,7 +458,7 @@ $ ./svm-train train.1.scale
 $ ./svm-predict test.1.scale train.1.scale.model test.1.predict
  \(\rightarrow\) Accuracy = 96.15%\end{alltt}
 
-\item Scaled sets with parameter selection
+\item Scaled sets with parameter selection (change to the directory {\tt tools}, which contains {\tt grid.py})
 \begin{alltt}$ python grid.py train.1.scale
 \(\cdots\)
 2.0 2.0 96.8922\end{alltt}
@@ -602,7 +605,7 @@ data in this case.
 
   Such data often occur in document classification. \libsvm is not
 particularly good for this type of problems. Fortunately, we have another
-  software \liblinear \cite{CJL07a}, which is very suitable for such data. We
+  software \liblinear \citep{REF08a}, which is very suitable for such data. We
   illustrate the difference between \libsvm and \liblinear using a
   document problem
 {\tt rcv1\_train.binary} from the \libsvm data sets.
@@ -668,6 +671,6 @@ Cross Validation Accuracy = 75.6711\%
 Clearly, using {\tt -s 2} leads to shorter training
 time.
 
-\bibliographystyle{../../chicago}
+\bibliographystyle{abbrvnat}
 \bibliography{../../sdp}
 \end{document}
