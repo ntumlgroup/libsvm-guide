@@ -1,11 +1,11 @@
 \documentclass[12pt]{article}
-\usepackage{xspace,amsmath,hyperref,url,color,alltt,epsfig,subfigure,pifont}
+\usepackage{xspace,amsmath,hyperref,url,color,alltt,epsfig,subfig,pifont}
 \usepackage[round,authoryear]{natbib}
 \setlength{\textwidth}{6.0in}
 \setlength{\oddsidemargin}{23pt}
 \setlength{\evensidemargin}{23pt}
-\setlength{\topmargin}{-0.5in}
-\setlength{\textheight}{8.8in}
+\setlength{\topmargin}{-0.7in}
+\setlength{\textheight}{9in}
 \newcommand{\libsvm}{$\mbox{\href{http://www.csie.ntu.edu.tw/~cjlin/libsvm}{\sf LIBSVM}}$\xspace}
 \newcommand{\bsvm}{$\mbox{{\sf BSVM}}$\xspace}
 \newcommand{\liblinear}{$\mbox{\href{http://www.csie.ntu.edu.tw/~cjlin/liblinear}{\sf LIBLINEAR}}$\xspace}
@@ -29,7 +29,7 @@ National Taiwan University, Taipei 106, Taiwan \\
 \url{http://www.csie.ntu.edu.tw/~cjlin}\\
 Last updated: \today
 \end{center}
-\medskip
+\smallskip
 
 %\maketitle
 
@@ -260,22 +260,22 @@ not good. On the other hand, the classifier in \ref{1c} and \ref{1d}
 does not overfit the training data and gives better cross-validation
 as well as testing accuracy.
 
-\begin{figure}[htbp]
+\begin{figure}[t!]
 \begin{center}
 \begin{tabular}{cc}
-\subfigure[Training data and an overfitting classifier]{
+\subfloat[Training data and an overfitting classifier]{
 \label{1a}
 \includegraphics[width=0.48\linewidth]{over1.png}}&
 %\epsfig{figure=over1.ps,width=.4\linewidth}}&
-\subfigure[Applying an overfitting classifier on testing data]{
+\subfloat[Applying an overfitting classifier on testing data]{
 \label{1b}
 \includegraphics[width=0.48\linewidth]{over2.png}}\\
 %\epsfig{figure=over2.ps,width=.4\linewidth}}\\
-\subfigure[Training data and a better classifier]{
+\subfloat[Training data and a better classifier]{
 \label{1c}
 \includegraphics[width=0.48\linewidth]{over3.png}}&
 %\epsfig{figure=over3.ps,width=.4\linewidth}}&
-\subfigure[Applying a better classifier on testing data]{
+\subfloat[Applying a better classifier on testing data]{
 \label{1d}
 \includegraphics[width=0.48\linewidth]{over4.png}}
 %\epsfig{figure=over4.ps,width=.4\linewidth}}
@@ -308,7 +308,7 @@ the grid-search can be easily parallelized because each $(C, \gamma)$
 is independent.  Many of advanced methods are iterative processes,
 e.g.  walking along a path, which can be hard to parallelize.
 
-\begin{figure}[htbp]
+\begin{figure}[t!]
 \begin{center}
 %\epsfig{figure=coarser.ps,angle=270,width=.45\linewidth,bbllx=70,bblly=325,bburx=465,bbury=625}
 \includegraphics[width=0.75\linewidth,viewport=145 55 625 450,clip]{coarser.png}
@@ -319,7 +319,7 @@ $\gamma=2^{-15},2^{-13},\ldots,2^{3}.$}
 \label{coarser}
 \end{figure}
 
-\begin{figure}[htbp]
+\begin{figure}[t!]
 \begin{center}
 %\epsfig{figure=finer.ps,angle=270,width=.45\linewidth,bbllx=70,bblly=325,bburx=465,bbury=625}
 \includegraphics[width=0.75\linewidth,viewport=145 55 625 450,clip]{finer.png}
