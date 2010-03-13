@@ -34,40 +34,36 @@ Last updated: \today
 %\maketitle
 
 \begin{abstract}
-Support vector machine (SVM) is a popular technique for 
-classification. However, beginners who 
-are not familiar with SVM often get 
-unsatisfactory results since they miss some easy but 
-significant steps. In this guide, we propose a 
-simple procedure, which usually gives reasonable results. 
+The support vector machine (SVM) is a popular classification
+technique. However, beginners who are not familiar with SVM often
+get unsatisfactory results since they miss some easy but significant
+steps. In this guide, we propose a simple procedure which usually
+gives reasonable results.
 \end{abstract}
+
 
 \section{Introduction}
 \label{intro}
-SVM (Support Vector Machine) is a useful technique for data
-classification. Even though people consider that it is easier
-to use than Neural Networks, however, users who are not 
-familiar with SVM often get unsatisfactory results at first.
-Here we propose a ``cookbook" approach which usually gives 
-reasonable results. 
+SVMs (Support Vector Machines) are a useful technique for data
+classification. Although SVM is considered easier to use than Neural
+Networks, users not familiar with it often get unsatisfactory results
+at first.  Here we outline a ``cookbook'' approach which usually gives
+reasonable results.
 
-Note that this guide is not for SVM researchers nor do 
-we guarantee the best accuracy. We also do not intend 
-to solve challenging or difficult problems. Our purpose 
-is to give SVM novices a recipe to obtain acceptable 
-results fast and easily.
+Note that this guide is not for SVM researchers nor do we guarantee
+you will achieve the highest accuracy. Also, we do not intend to solve
+challenging or difficult problems. Our purpose is to give SVM novices
+a recipe for rapidly obtaining acceptable results. 
 
-Although users do not need to understand the underlying 
-theory of SVM, nevertheless, we briefly introduce SVM
-basics which are necessary for explaining
-our procedure. A classification task usually involves 
-with training and testing data which 
-consist of some data instances. Each instance in the  
-training set contains one ``target value" (class labels) 
-and several ``attributes" (features). 
-The goal of SVM is to produce a model which 
-predicts target value of data instances in the testing 
-set which are given only the attributes.
+Although users do not need to understand the underlying theory behind
+SVM, we briefly introduce the basics necessary for explaining our
+procedure. A classification task usually involves separating data into
+training and testing sets. Each instance in the training set contains
+one ``target value'' (i.e. the class labels) and several
+``attributes'' (i.e. the features or observed variables). The goal of
+SVM is to produce a model (based on the training data) which predicts
+the target values of the test data given only the test data
+attributes. 
 
 Given a training set of
 instance-label pairs  $(\bx_i,y_i), i = 1, \ldots, l$
@@ -83,17 +79,13 @@ problem:
 \mbox{subject to}&& y_i(\bw^T \phi(\bx_i) + b) \geq 1 - \xi_i,\label{svml1}\\
 && \xi_i \geq 0. \nonumber
 \end{eqnarray}
-Here training vectors $\bx_i$ are mapped into a
-higher (maybe infinite) dimensional space
-by the function $\phi$.
-Then SVM finds a linear separating hyperplane
-with the maximal margin in this
-higher dimensional space.
-$C>0$ is the penalty parameter of
-the error term. Furthermore, $K(\bx_i, \bx_j) \equiv 
-\phi(\bx_i)^T\phi(\bx_j)$ is called the kernel function.
-Though new kernels are being proposed by researchers, 
-beginners may find in SVM books the following four
+Here training vectors $\bx_i$ are mapped into a higher (maybe
+infinite) dimensional space by the function $\phi$.  SVM finds a
+linear separating hyperplane with the maximal margin in this higher
+dimensional space.  $C>0$ is the penalty parameter of the error
+term. Furthermore, $K(\bx_i, \bx_j) \equiv \phi(\bx_i)^T\phi(\bx_j)$
+is called the kernel function.  Though new kernels are being proposed
+by researchers, beginners may find in SVM books the following four
 basic kernels:
 \begin{itemize}
 \item linear: $K(\bx_i, \bx_j) = \bx_i ^T \bx_j$.
@@ -106,11 +98,11 @@ Here, $\gamma$, $r$, and $d$ are kernel parameters.
 
 \subsection{Real-World Examples}
 
-Table \ref{accuracy} presents some real-world examples. These data 
-sets are reported from our users who could not obtain reasonable 
-accuracy in the beginning. Using the procedure illustrated in this 
-guide, we help them to achieve better performance. Details are in 
-Appendix \ref{app}. 
+Table \ref{accuracy} presents some real-world examples. These data
+sets are supplied by our users who could not obtain reasonable
+accuracy in the beginning. Using the procedure illustrated in this
+guide, we help them to achieve better performance. Details are in
+Appendix \ref{app}.
 
 \begin{table}
 \caption{Problem characteristics and performance comparisons.}
@@ -169,137 +161,104 @@ whole training set.}
 
 \subsection{Categorical Feature}
 
-SVM requires that each data instance is represented
-as a vector of real numbers. Hence, if there are 
-categorical attributes, we first have to convert 
-them into numeric data. We recommend using $m$ numbers to 
-represent an $m$-category attribute. Only one of the $m$
-numbers is one, and others are zero. For example,
-a three-category attribute such as \{red, green, blue\}
-can be represented as (0,0,1),
-(0,1,0), and (1,0,0). Our experience indicates that if
-the number of values in an attribute is not too many, 
-this coding might be more stable 
-than using a single number to represent a 
-categorical attribute. 
+SVM requires that each data instance is represented as a vector of
+real numbers. Hence, if there are categorical attributes, we first
+have to convert them into numeric data. We recommend using $m$ numbers
+to represent an $m$-category attribute. Only one of the $m$ numbers is
+one, and others are zero. For example, a three-category attribute such
+as \{red, green, blue\} can be represented as (0,0,1), (0,1,0), and
+(1,0,0). Our experience indicates that if the number of values in an
+attribute is not too large, this coding might be more stable than
+using a single number. 
 
 \subsection{Scaling}
 \label{scaling}
 
-Scaling them before applying SVM is very important.
-In 
-\href{ftp://ftp.sas.com/pub/neural/FAQ.html}
-{Part 2 of Neural Networks FAQ},
-\cite{NN01a} explains why we scale 
-data while using Neural Networks, and most 
-of considerations also apply to SVM. 
+Scaling before applying SVM is very
+important. \href{ftp://ftp.sas.com/pub/neural/FAQ.html} {Part 2 of
+  Sarle's Neural Networks FAQ} \cite{NN01a} explains the importance of
+this and most of considerations also apply to SVM. The main advantage
+of scaling is to avoid attributes in greater numeric ranges dominating
+those in smaller numeric ranges. Another advantage is to avoid
+numerical difficulties during the calculation.  Because kernel values
+usually depend on the inner products of feature vectors, e.g. the
+linear kernel and the polynomial kernel, large attribute values might
+cause numerical problems.  We recommend linearly scaling each
+attribute to the range $[-1,+1]$ or $[0,1]$.
 
-The main advantage is to avoid attributes in 
-greater numeric ranges dominate those in 
-smaller numeric ranges. Another advantage is to 
-avoid numerical difficulties during the calculation. 
-Because kernel values usually depend on the
-inner products of feature vectors, e.g. the linear
-kernel and the polynomial kernel, large attribute
-values might cause numerical problems.
-We recommend linearly scaling each attribute to 
-the range $[-1,+1]$ or $[0,1]$.
-
-Of course we have to use the same method to 
-scale testing data before testing. For example, 
-suppose that we scaled the first attribute 
-of training data from $[-10, +10]$ to $[-1, +1]$. 
-If the first attribute of testing
-data is lying in the range $[-11, +8]$, we must 
+Of course we have to use the same method to scale both training and
+testing data. For example, suppose that we scaled the first attribute
+of training data from $[-10, +10]$ to $[-1, +1]$.  If the first
+attribute of testing data lies in the range $[-11, +8]$, we must
 scale the testing data to $[-1.1, +0.8]$.
 
 \section{Model Selection}
-Though there are only four common kernels 
-mentioned in Section \ref{intro}, we must decide 
-which one to try first. Then the penalty parameter 
-$C$ and kernel parameters are chosen.
+Though there are only four common kernels mentioned in Section
+\ref{intro}, we must decide which one to try first. Then the penalty
+parameter $C$ and kernel parameters are chosen.
 
 \subsection{RBF Kernel}
 \label{sec:rbf-kernel}
-We suggest that in 
-general RBF is a reasonable first choice.
-The RBF kernel nonlinearly maps 
-samples into a higher dimensional space, so it, 
-unlike the linear kernel, can handle the case when
-the relation between class labels and 
-attributes is nonlinear. Furthermore, the
-linear kernel is a special case
-of RBF as \cite{SSK02b} show that the linear kernel 
-with a penalty parameter $\tilde{C}$ has the same performance
-as the RBF kernel with some parameters $(C, \gamma)$. In
-addition, the sigmoid 
-kernel behaves like RBF for certain parameters
-\citep{HTL03a}.
+In general, the RBF kernel is a reasonable first choice.  This kernel
+nonlinearly maps samples into a higher dimensional space so it,
+unlike the linear kernel, can handle the case when the relation
+between class labels and attributes is nonlinear. Furthermore, the
+linear kernel is a special case of RBF \cite{SSK02b} since the linear
+kernel with a penalty parameter $\tilde{C}$ has the same performance
+as the RBF kernel with some parameters $(C, \gamma)$. In addition, the
+sigmoid kernel behaves like RBF for certain parameters \citep{HTL03a}.
 
-The second reason is the number of hyperparameters
-which influences the complexity of model selection.
-The polynomial kernel has more hyperparameters
-than the RBF kernel.
+The second reason is the number of hyperparameters which influences
+the complexity of model selection.  The polynomial kernel has more
+hyperparameters than the RBF kernel.
 
-Finally, the RBF kernel has less numerical difficulties.
-One key point is $0 < K_{ij} \leq 1$ in contrast to 
-polynomial kernels of which kernel values may go to 
-infinity ($\gamma {\bx_i}^T \bx_j + r > 1$) or zero 
-($\gamma {\bx_i}^T \bx_j + r < 1$) while the degree is large.
-Moreover, we must note that the sigmoid kernel is  
-not valid (i.e. not the inner product of two vectors) 
-under some parameters \citep{VV95a}.
+Finally, the RBF kernel has fewer numerical difficulties.  One key
+point is $0 < K_{ij} \leq 1$ in contrast to polynomial kernels of
+which kernel values may go to infinity ($\gamma {\bx_i}^T \bx_j + r >
+1$) or zero ($\gamma {\bx_i}^T \bx_j + r < 1$) while the degree is
+large.  Moreover, we must note that the sigmoid kernel is not valid
+(i.e. not the inner product of two vectors) under some parameters
+\citep{VV95a}.
 
 
-However, there are some situations where the
-RBF kernel is not suitable. In particular, 
-when the number of features is very large,
-one may just use the linear kernel. We 
-discuss details in Appendix
+There are some situations where the RBF kernel is not
+suitable. In particular, when the number of features is very large,
+one may just use the linear kernel. We discuss details in Appendix
 \ref{sec:when-use-linear}.
 
 \subsection{Cross-validation and Grid-search}
 \label{cross}
-There are two parameters 
-while using RBF kernels: $C$ and $\gamma$. 
-It is not known beforehand which $C$ and 
-$\gamma$ are the best for one problem;
-consequently some kind of model selection 
-(parameter search) must be done. The goal is
-to identify good $(C, \gamma)$ so that the classifier 
-can accurately predict unknown data (i.e., testing data).
-Note that it may not be useful to achieve high 
-training accuracy (i.e., classifiers accurately 
-predict training data whose class labels are indeed 
-known). Therefore, a common way is to separate 
-training data into two parts of which one is considered
-unknown in training the classifier. Then the prediction
-accuracy on this set can more precisely reflect the
-performance on classifying unknown data. An improved version of
-this procedure is cross-validation.
+There are two parameters for an RBF kernel: $C$ and $\gamma$.  It is
+not known beforehand which $C$ and $\gamma$ are best for a given
+problem; consequently some kind of model selection (parameter search)
+must be done. The goal is to identify good $(C, \gamma)$ so that the
+classifier can accurately predict unknown data (i.e. testing data).
+Note that it may not be useful to achieve high training accuracy
+(i.e. a classifier which accurately predicts training data whose class
+labels are indeed known). As discussed above, a common strategy is to
+separate the data set into two parts, of which one is considered
+unknown. The prediction accuracy obtained from the ``unknown'' set more
+precisely reflects the performance on classifying an independent data
+set. An improved version of this procedure is known as cross-validation.
 
-In $v$-fold cross-validation,
-we first divide the training set into $v$ subsets of equal
-size. Sequentially one subset is tested using the
-classifier trained on the remaining $v-1$ subsets.
-Thus, each instance of the whole training set is 
-predicted once so the cross-validation accuracy
-is the percentage of data which are correctly classified.
+In $v$-fold cross-validation, we first divide the training set into
+$v$ subsets of equal size. Sequentially one subset is tested using the
+classifier trained on the remaining $v-1$ subsets.  Thus, each
+instance of the whole training set is predicted once so the
+cross-validation accuracy is the percentage of data which are
+correctly classified.
 
 The cross-validation procedure can prevent the overfitting
-problem. We use Figure \ref{over} which is a binary 
-classification problem (triangles and circles) to 
-illustrate this issue. Filled circles and triangles 
-are the training data while hollow circles
-and triangles are the testing data. The testing
-accuracy the classifier in Figures \ref{1a} and \ref{1b}
- is not good since it overfits 
-the training data. If we think training and testing
-data in Figure \ref{1a} and \ref{1b} as the training  and
-validation sets in cross-validation, the accuracy is
-not good. On the other hand, classifier in \ref{1c} and \ref{1d} without
-overfitting training data gives better cross-validation 
-as well as testing accuracy. 
+problem. Figure~\ref{over} represents a binary classification problem
+to illustrate this issue. Filled circles and triangles are the
+training data while hollow circles and triangles are the testing
+data. The testing accuracy of the classifier in Figures \ref{1a} and
+\ref{1b} is not good since it overfits the training data. If we think
+of the training and testing data in Figure \ref{1a} and \ref{1b} as
+the training and validation sets in cross-validation, the accuracy is
+not good. On the other hand, the classifier in \ref{1c} and \ref{1d}
+does not overfit the training data and gives better cross-validation
+as well as testing accuracy.
 
 \begin{figure}[htbp]
 \begin{center}
@@ -328,34 +287,26 @@ testing data).}
 \label{over}
 \end{figure}
 
-We recommend a ``grid-search" on $C$ and
-$\gamma$ using cross-validation. Basically pairs of $(C,\gamma)$ are tried 
-and the one with the best cross-validation accuracy 
-is picked. We found that trying
-exponentially growing sequences of $C$ and $\gamma$
-is a practical method to identify good parameters
-(for example, $C=2^{-5},2^{-3},\ldots,2^{15}$, 
-$\gamma=2^{-15},2^{-13},\ldots,2^3$).
+We recommend a ``grid-search'' on $C$ and $\gamma$ using
+cross-validation. Various pairs of $(C,\gamma)$ values are tried and
+the one with the best cross-validation accuracy is picked. We found
+that trying exponentially growing sequences of $C$ and $\gamma$ is a
+practical method to identify good parameters (for example,
+$C=2^{-5},2^{-3},\ldots,2^{15}$, $\gamma=2^{-15},2^{-13},\ldots,2^3$).
 
-The grid-search is straightforward but
-seems stupid. In fact, there are several 
-advanced methods which can save computational 
-cost by, for example, approximating the cross-validation 
-rate. However, there are two motivations why we prefer the 
-simple grid-search approach.
+The grid-search is straightforward but seems naive. In fact, there are
+several advanced methods which can save computational cost by, for
+example, approximating the cross-validation rate. However, there are
+two motivations why we prefer the simple grid-search approach.
 
-One is that psychologically we may not feel 
-safe to use methods which 
-avoid doing an exhaustive parameter search 
-by approximations or heuristics.
-The other reason is that the computational time to find good 
-parameters by grid-search is not much more than that 
-by advanced methods since there are only 
-two parameters.
-Furthermore, the grid-search can be easily parallelized 
-because each $(C, \gamma)$ is independent.
-Many of advanced methods are iterative processes, e.g.
-walking along a path, which might be difficult for parallelization. 
+One is that, psychologically, we may not feel safe to use methods
+which avoid doing an exhaustive parameter search by approximations or
+heuristics.  The other reason is that the computational time required
+to find good parameters by grid-search is not much more than that by
+advanced methods since there are only two parameters.  Furthermore,
+the grid-search can be easily parallelized because each $(C, \gamma)$
+is independent.  Many of advanced methods are iterative processes,
+e.g.  walking along a path, which can be hard to parallelize.
 
 \begin{figure}[htbp]
 \begin{center}
@@ -379,69 +330,59 @@ $\gamma=2^{-7},2^{-6.75},\ldots,2^{-3}.$}
 \label{finer}
 \end{figure}
 
-Since doing a complete grid-search may still be time-consuming, 
-we recommend using a coarse grid first. 
-After identifying a ``better" region on the
-grid, a finer grid search on that region can 
-be conducted. To illustrate this, we do an experiment on the problem
-\href{http://www.csie.ntu.edu.tw/~cjlin/libsvmtools/binary/german.numer_scale}{{\sf german}} from the 
-\href{http://www.ncc.up.pt/liacc/ML/statlog/datasets.html}{Statlog} 
-collection \citep{DM94a}. After scaling this set,
-we first use a coarse grid (Figure \ref{coarser}) and find that
-the best $(C, \gamma)$ is $(2^3, 2^{-5})$ with the cross-validation rate 77.5\%.
-Next we conduct a finer grid search on the neighborhood 
-of $(2^3, 2^{-5})$ (Figure \ref{finer}) and obtain a better cross-validation 
-rate 77.6\% at $(2^{3.25}, 2^{-5.25})$. After the best $(C, \gamma)$ is found, 
-the whole training set is trained again
-to generate the final classifier.
+Since doing a complete grid-search may still be time-consuming, we
+recommend using a coarse grid first.  After identifying a ``better''
+region on the grid, a finer grid search on that region can be
+conducted. To illustrate this, we do an experiment on the problem
+\href{http://www.csie.ntu.edu.tw/~cjlin/libsvmtools/binary/german.numer_scale}{{\sf
+    german}} from the
+\href{http://www.ncc.up.pt/liacc/ML/statlog/datasets.html}{Statlog}
+collection \citep{DM94a}. After scaling this set, we first use a
+coarse grid (Figure \ref{coarser}) and find that the best $(C,
+\gamma)$ is $(2^3, 2^{-5})$ with the cross-validation rate 77.5\%.
+Next we conduct a finer grid search on the neighborhood of $(2^3,
+2^{-5})$ (Figure \ref{finer}) and obtain a better cross-validation
+rate 77.6\% at $(2^{3.25}, 2^{-5.25})$. After the best $(C, \gamma)$
+is found, the whole training set is trained again to generate the
+final classifier.
 
-The above approach works well for problems with 
-thousands or more data points. For very large data sets, 
-a feasible approach is to randomly choose
-a subset of the data set, conduct grid-search on
-them, and then do a better-region-only grid-search on
-the complete data set.
+The above approach works well for problems with thousands or more data
+points. For very large data sets a feasible approach is to randomly
+choose a subset of the data set, conduct grid-search on them, and then
+do a better-region-only grid-search on the complete data set.
 
 \section{Discussion}
 
-In some situations, the proposed procedure is not good
-enough, so other techniques such as feature selection may
-be needed. Such issues are beyond our consideration
-here. Our experience indicates that the
-procedure works well for data which do not
-have many features. 
-If there are thousands of
-attributes, there may be a need to choose a 
+In some situations the above proposed procedure is not good enough, so
+other techniques such as feature selection may be needed. These issues
+are beyond the scope of this guide. Our experience indicates that the
+procedure works well for data which do not have many features.  If
+there are thousands of attributes, there may be a need to choose a
 subset of them before giving the data to SVM.
 
-\section*{Acknowledgement}
-We thank all users of our SVM software
-\libsvm and \bsvm, who help us to identify
-possible difficulties encountered by beginners.
+\section*{Acknowledgments}
+We thank all users of our SVM software \libsvm and \bsvm, who helped
+us to identify possible difficulties encountered by beginners. We also thank some users (in particular, Robert Campbell) for proofreading the paper.
 
 \appendix
 
 \section{Examples of the Proposed Procedure}
 \label{app}
 
-In this appendix, we compare accuracy
-by the proposed procedure with that by general beginners.
-Experiments are on the three problems mentioned in
-Table \ref{accuracy} by using the software \libsvm
-\citep{CC01a}. For each problem, we first list the
-accuracy by direct training and testing. Secondly, we show 
-the difference in accuracy with and without scaling.
-From what has been discussed in Section \ref{scaling},
-the range of training set attributes must 
-be saved so that we are able to restore them while
-scaling the testing set.
-Thirdly, the accuracy by the proposed procedure (scaling 
-and then model selection) is presented. Finally, we demonstrate 
-the use of a tool in \libsvm which does 
-the whole procedure automatically. Note that a similar 
-parameter selection tool like the {\tt grid.py} presented below
-is available in the R-\libsvm interface
-(see the function {\tt tune}).
+In this appendix we compare accuracy by the proposed procedure with
+that often used by general beginners.  Experiments are on the three
+problems mentioned in Table \ref{accuracy} by using the software
+\libsvm \citep{CC01a}. For each problem, we first list the accuracy by
+direct training and testing. Secondly, we show the difference in
+accuracy with and without scaling.  From what has been discussed in
+Section \ref{scaling}, the range of training set attributes must be
+saved so that we are able to restore them while scaling the testing
+set.  Thirdly, the accuracy by the proposed procedure (scaling and
+then model selection) is presented. Finally, we demonstrate the use of
+a tool in \libsvm which does the whole procedure automatically. Note
+that a similar parameter selection tool like the {\tt grid.py}
+presented below is available in the R-\libsvm interface (see the
+function {\tt tune}).
 
 \begin{itemize}
 \item Astroparticle Physics
@@ -560,16 +501,13 @@ Next, we split our discussion to three parts:
 
 \subsection{Number of instances $\ll$ number of features}
 
-  Many microarray data in bioinformatics are of this type. We consider
-  the Leukemia data from \libsvm data sets
-  (\url{http://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets}). The
-  training and testing sets have 38 and 34
-instances, respectively. The number
-  of features is 7,129, much larger
-than the number of instances. 
-We merge the two files and
-  compare the cross validation accuracy of using the RBF and the
-  linear kernels:
+Many microarray data in bioinformatics are of this type. We consider
+the Leukemia data from the \libsvm data sets
+(\url{http://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets}). The
+training and testing sets have 38 and 34 instances, respectively. The
+number of features is 7,129, much larger than the number of instances.
+We merge the two files and compare the cross validation accuracy of
+using the RBF and the linear kernels:
 
   \begin{itemize}
   \item RBF kernel with parameter selection
@@ -645,22 +583,15 @@ split is {\em less than four seconds}.
 
 \subsection{Number of instances $\gg$ number of features}
 
-As the number of features is small, one often
-maps data to {\em higher dimensional spaces}
-(i.e., using nonlinear kernels).
-However, if you really would like to use the
-linear kernel, you may use \liblinear
-with the option 
-{\tt -s 2}.
-When the number of features is small, it is often faster than 
-the default {\tt -s 1}.
-Consider the data
+As the number of features is small, one often maps data to {\em higher
+  dimensional spaces} (i.e., using nonlinear kernels).  However, if
+you really would like to use the linear kernel, you may use \liblinear
+with the option {\tt -s 2}.  When the number of features is small, it
+is often faster than the default {\tt -s 1}.  Consider the data
 \url{http://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/binary/covtype.libsvm.binary.scale.bz2}.
-The number of instances
-581,012 is much larger than the number of
-features 54.
-We run \liblinear with {\tt -s 1} (default)
-and {\tt -s 2}.
+The number of instances 581,012 is much larger than the number of
+features 54.  We run \liblinear with {\tt -s 1} (default) and {\tt -s
+  2}.
 \begin{alltt}$ time liblinear-1.21/train -c 4 -v 5 -s 2 covtype.libsvm.binary.scale 
 Cross Validation Accuracy = 75.67\%
 67.224s
