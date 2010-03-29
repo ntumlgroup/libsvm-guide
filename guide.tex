@@ -114,6 +114,7 @@ Applications&\#training&\#testing&\#features&\#classes&Accuracy&Accuracy \\
                 &          &         &          &       &        &procedure\\
 \hline
 Astroparticle\footnotemark[1] & 3,089 & 4,000 & 4 & 2 & 75.2\% & 96.9\% \\
+%Astroparticle\footnotemark[1] & 3,089 & 4,000 & 4 & 2 & 75.2\% & 96.9\% \\
 Bioinformatics\footnotemark[2] & 391 & 0\footnotemark[4] & 20 & 3 & 36\% & 85.2\% \\
 Vehicle\footnotemark[3] & 1,243 & 41 & 21 & 2 & 4.88\% & 87.8\%
 \end{tabular}
@@ -175,7 +176,7 @@ using a single number.
 \label{scaling}
 
 Scaling before applying SVM is very
-important. \href{ftp://ftp.sas.com/pub/neural/FAQ.html} {Part 2 of
+important. \href{http://www.faqs.org/faqs/ai-faq/neural-nets} {Part 2 of
   Sarle's Neural Networks FAQ} \cite{NN01a} explains the importance of
 this and most of considerations also apply to SVM. The main advantage
 of scaling is to avoid attributes in greater numeric ranges dominating
@@ -191,6 +192,9 @@ testing data. For example, suppose that we scaled the first attribute
 of training data from $[-10, +10]$ to $[-1, +1]$.  If the first
 attribute of testing data lies in the range $[-11, +8]$, we must
 scale the testing data to $[-1.1, +0.8]$.
+See Appendix \ref{sec:comm-mist-scal} for
+some real examples.
+
 
 \section{Model Selection}
 Though there are only four common kernels mentioned in Section
@@ -334,7 +338,7 @@ Since doing a complete grid-search may still be time-consuming, we
 recommend using a coarse grid first.  After identifying a ``better''
 region on the grid, a finer grid search on that region can be
 conducted. To illustrate this, we do an experiment on the problem
-\href{http://www.csie.ntu.edu.tw/~cjlin/libsvmtools/binary/german.numer_scale}{{\sf
+\href{http://www.csie.ntu.edu.tw/~cjlin/libsvmtools/binary/german.numer_scale}{{\tt
     german}} from the
 \href{http://www.ncc.up.pt/liacc/ML/statlog/datasets.html}{Statlog}
 collection \citep{DM94a}. After scaling this set, we first use a
@@ -388,28 +392,28 @@ function {\tt tune}).
 \item Astroparticle Physics
 \begin{itemize}
 \item Original sets with default parameters
-\begin{alltt}$ ./svm-train train.1
-\$ ./svm-predict test.1 train.1.model test.1.predict
+\begin{alltt}$ ./svm-train svmguide1
+\$ ./svm-predict svmguide1.t svmguide1.model svmguide1.t.predict
  \(\rightarrow\) Accuracy = 66.925%\end{alltt}
 
 \item Scaled sets with default parameters
-\begin{alltt}$ ./svm-scale -l -1 -u 1 -s range1 train.1 > train.1.scale
-$ ./svm-scale -r range1 test.1 > test.1.scale
-$ ./svm-train train.1.scale
-$ ./svm-predict test.1.scale train.1.scale.model test.1.predict
+\begin{alltt}$ ./svm-scale -l -1 -u 1 -s range1 svmguide1 > svmguide1.scale
+$ ./svm-scale -r range1 svmguide1.t > svmguide1.t.scale
+$ ./svm-train svmguide1.scale
+$ ./svm-predict svmguide1.t.scale svmguide1.scale.model svmguide1.t.predict
  \(\rightarrow\) Accuracy = 96.15%\end{alltt}
 
 \item Scaled sets with parameter selection (change to the directory {\tt tools}, which contains {\tt grid.py})
-\begin{alltt}$ python grid.py train.1.scale
+\begin{alltt}$ python grid.py svmguide1.scale
 \(\cdots\)
 2.0 2.0 96.8922\end{alltt}
 (Best $C$=2.0, $\gamma$=2.0 with five-fold cross-validation rate=96.8922\%)
-\begin{alltt}$ ./svm-train -c 2 -g 2 train.1.scale
-$ ./svm-predict test.1.scale train.1.scale.model test.1.predict
+\begin{alltt}$ ./svm-train -c 2 -g 2 svmguide1.scale
+$ ./svm-predict svmguide1.t.scale svmguide1.scale.model svmguide1.t.predict
  \(\rightarrow\) Accuracy = 96.875%\end{alltt}
 
 \item Using an automatic script
-\begin{alltt}$ python easy.py train.1 test.1
+\begin{alltt}$ python easy.py svmguide1 svmguide1.t
 Scaling training data...
 Cross validation...
 Best c=2.0, g=2.0
@@ -422,23 +426,23 @@ Accuracy = 96.875% (3875/4000) (classification)\end{alltt}
 \item Bioinformatics
 \begin{itemize}
 \item Original sets with default parameters
-\begin{alltt}$ ./svm-train -v 5 train.2
+\begin{alltt}$ ./svm-train -v 5 svmguide2
  \(\rightarrow\) Cross Validation Accuracy = 56.5217%\end{alltt}
 
 \item Scaled sets with default parameters
-\begin{alltt}$ ./svm-scale -l -1 -u 1 train.2 > train.2.scale
-$ ./svm-train -v 5 train.2.scale
+\begin{alltt}$ ./svm-scale -l -1 -u 1 svmguide2 > svmguide2.scale
+$ ./svm-train -v 5 svmguide2.scale
  \(\rightarrow\) Cross Validation Accuracy = 78.5166%\end{alltt}
 
 \item Scaled sets with parameter selection
-\begin{alltt}$ python grid.py train.2.scale
+\begin{alltt}$ python grid.py svmguide2.scale
 \(\cdots\)
 2.0 0.5 85.1662
  \(\rightarrow\) Cross Validation Accuracy = 85.1662%\end{alltt}
 (Best $C$=2.0, $\gamma$=0.5 with five fold cross-validation rate=85.1662\%)
 
 \item Using an automatic script
-\begin{alltt}$ python easy.py train.2
+\begin{alltt}$ python easy.py svmguide2
 Scaling training data...
 Cross validation...
 Best c=2.0, g=0.5
@@ -448,28 +452,28 @@ Training...\end{alltt}
 \item Vehicle
 \begin{itemize}
 \item Original sets with default parameters
-\begin{alltt}$ ./svm-train train.3
-$ ./svm-predict test.3 train.3.model test.3.predict
+\begin{alltt}$ ./svm-train svmguide3
+$ ./svm-predict svmguide3.t svmguide3.model svmguide3.t.predict
  \(\rightarrow\) Accuracy = 2.43902%\end{alltt}
 
 \item Scaled sets with default parameters
-\begin{alltt}$ ./svm-scale -l -1 -u 1 -s range3 train.3 > train.3.scale
-$ ./svm-scale -r range3 test.3 > test.3.scale
-$ ./svm-train train.3.scale
-$ ./svm-predict test.3.scale train.3.scale.model test.3.predict
+\begin{alltt}$ ./svm-scale -l -1 -u 1 -s range3 svmguide3 > svmguide3.scale
+$ ./svm-scale -r range3 svmguide3.t > svmguide3.t.scale
+$ ./svm-train svmguide3.scale
+$ ./svm-predict svmguide3.t.scale svmguide3.scale.model svmguide3.t.predict
  \(\rightarrow\) Accuracy = 12.1951%\end{alltt}
 
 \item Scaled sets with parameter selection
-\begin{alltt}$ python grid.py train.3.scale
+\begin{alltt}$ python grid.py svmguide3.scale
 \(\cdots\)
 128.0 0.125 84.8753\end{alltt}
 (Best $C$=128.0, $\gamma$=0.125 with five-fold cross-validation rate=84.8753\%)
-\begin{alltt}$ ./svm-train -c 128 -g 0.125 train.3.scale
-$ ./svm-predict test.3.scale train.3.scale.model test.3.predict
+\begin{alltt}$ ./svm-train -c 128 -g 0.125 svmguide3.scale
+$ ./svm-predict svmguide3.t.scale svmguide3.scale.model svmguide3.t.predict
  \(\rightarrow\) Accuracy = 87.8049%\end{alltt}
 
 \item Using an automatic script
-\begin{alltt}$ python easy.py train.3 test.3
+\begin{alltt}$ python easy.py svmguide3 svmguide3.t
 Scaling training data...
 Cross validation...
 Best c=128.0, g=0.125
@@ -602,6 +606,46 @@ Cross Validation Accuracy = 75.6711\%
 Clearly, using {\tt -s 2} leads to shorter training
 time.
 
+\section{Common Mistakes in Scaling Training and Testing Data}
+\label{sec:comm-mist-scal}
+
+Section \ref{scaling} stresses the importance
+of using the same scaling factors for
+training and testing sets. We give a real
+example on classifying traffic light 
+signals (courtesy of
+Georges Bonga at
+Hochschule f\"{u}r Technik
+und Wirtschaf Berlin.)
+It is available at 
+\href{http://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets}{\sf LIBSVM Data Sets}.
+
+If training and testing sets are separately 
+scaled to $[0,1]$, the resulting accuracy 
+is lower than 70\%.
+\begin{alltt}$ ../svm-scale -l 0 svmguide4 > svmguide4.scale
+$ ../svm-scale -l 0 svmguide4.t > svmguide4.t.scale
+$ python easy.py svmguide4.scale svmguide4.t.scale 
+Accuracy = 69.2308% (216/312) (classification)
+\end{alltt}
+Using the same scaling factors for training and
+testing sets, we obtain much
+better accuracy.
+\begin{alltt}$ ../svm-scale -l 0 -s range4 svmguide4 > svmguide4.scale
+$ ../svm-scale -l 0 -r range4 svmguide4.t > svmguide4.t.scale
+$ python easy.py svmguide4.scale svmguide4.t.scale
+Accuracy = 89.4231\% (279/312) (classification)
+\end{alltt}
+With the correct setting,
+the 10 features in {\tt svmguide4.t.scale} have the
+following maximal values:
+\begin{center}
+  0.7402, 0.4421, 0.6291, 0.8583, 0.5385, 0.7407, 0.3982, 1.0000,
+  0.8218, 0.9874
+\end{center}
+Clearly, the earlier way to scale the 
+testing set to $[0,1]$ generates an erroneous
+set.
 \bibliographystyle{abbrvnat}
 \bibliography{../../sdp}
 \end{document}
