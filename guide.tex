@@ -27,7 +27,7 @@
 Department of Computer Science\\
 National Taiwan University, Taipei 106, Taiwan \\
 \url{http://www.csie.ntu.edu.tw/~cjlin}\\
-Last updated: \today
+Initial version: 2003 \quad Last updated: \today
 \end{center}
 \smallskip
 
@@ -114,7 +114,6 @@ Applications&\#training&\#testing&\#features&\#classes&Accuracy&Accuracy \\
                 &          &         &          &       &        &procedure\\
 \hline
 Astroparticle\footnotemark[1] & 3,089 & 4,000 & 4 & 2 & 75.2\% & 96.9\% \\
-%Astroparticle\footnotemark[1] & 3,089 & 4,000 & 4 & 2 & 75.2\% & 96.9\% \\
 Bioinformatics\footnotemark[2] & 391 & 0\footnotemark[4] & 20 & 3 & 36\% & 85.2\% \\
 Vehicle\footnotemark[3] & 1,243 & 41 & 21 & 2 & 4.88\% & 87.8\%
 \end{tabular}
@@ -388,8 +387,7 @@ that a similar parameter selection tool like the {\tt grid.py}
 presented below is available in the R-\libsvm interface (see the
 function {\tt tune}).
 
-\begin{itemize}
-\item Astroparticle Physics
+\subsection{Astroparticle Physics}
 \begin{itemize}
 \item Original sets with default parameters
 \begin{alltt}$ ./svm-train svmguide1
@@ -423,7 +421,7 @@ Testing...
 Accuracy = 96.875% (3875/4000) (classification)\end{alltt}
 
 \end{itemize}
-\item Bioinformatics
+\subsection{Bioinformatics}
 \begin{itemize}
 \item Original sets with default parameters
 \begin{alltt}$ ./svm-train -v 5 svmguide2
@@ -449,7 +447,7 @@ Best c=2.0, g=0.5
 Training...\end{alltt}
 
 \end{itemize}
-\item Vehicle
+\subsection{Vehicle}
 \begin{itemize}
 \item Original sets with default parameters
 \begin{alltt}$ ./svm-train svmguide3
@@ -481,9 +479,48 @@ Training...
 Scaling testing data...
 Testing...
 Accuracy = 87.8049% (36/41) (classification)\end{alltt}
+\end{itemize}
 
-\end{itemize}
-\end{itemize}
+\section{Common Mistakes in Scaling Training and Testing Data}
+\label{sec:comm-mist-scal}
+
+Section \ref{scaling} stresses the importance
+of using the same scaling factors for
+training and testing sets. We give a real
+example on classifying traffic light 
+signals (courtesy of
+Georges Bonga at
+Beuth Hochschule f\"{u}r Technik
+Berlin.)
+It is available at 
+\href{http://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets}{\sf LIBSVM Data Sets}.
+
+If training and testing sets are separately 
+scaled to $[0,1]$, the resulting accuracy 
+is lower than 70\%.
+\begin{alltt}$ ../svm-scale -l 0 svmguide4 > svmguide4.scale
+$ ../svm-scale -l 0 svmguide4.t > svmguide4.t.scale
+$ python easy.py svmguide4.scale svmguide4.t.scale 
+Accuracy = 69.2308% (216/312) (classification)
+\end{alltt}
+Using the same scaling factors for training and
+testing sets, we obtain much
+better accuracy.
+\begin{alltt}$ ../svm-scale -l 0 -s range4 svmguide4 > svmguide4.scale
+$ ../svm-scale -r range4 svmguide4.t > svmguide4.t.scale
+$ python easy.py svmguide4.scale svmguide4.t.scale
+Accuracy = 89.4231\% (279/312) (classification)
+\end{alltt}
+With the correct setting,
+the 10 features in {\tt svmguide4.t.scale} have the
+following maximal values:
+\begin{center}
+  0.7402, 0.4421, 0.6291, 0.8583, 0.5385, 0.7407, 0.3982, 1.0000,
+  0.8218, 0.9874
+\end{center}
+Clearly, the earlier way to scale the 
+testing set to $[0,1]$ generates an erroneous
+set.
 
 \section{When to Use Linear but not
 RBF Kernel}
@@ -606,46 +643,6 @@ Cross Validation Accuracy = 75.6711\%
 Clearly, using {\tt -s 2} leads to shorter training
 time.
 
-\section{Common Mistakes in Scaling Training and Testing Data}
-\label{sec:comm-mist-scal}
-
-Section \ref{scaling} stresses the importance
-of using the same scaling factors for
-training and testing sets. We give a real
-example on classifying traffic light 
-signals (courtesy of
-Georges Bonga at
-Hochschule f\"{u}r Technik
-und Wirtschaf Berlin.)
-It is available at 
-\href{http://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets}{\sf LIBSVM Data Sets}.
-
-If training and testing sets are separately 
-scaled to $[0,1]$, the resulting accuracy 
-is lower than 70\%.
-\begin{alltt}$ ../svm-scale -l 0 svmguide4 > svmguide4.scale
-$ ../svm-scale -l 0 svmguide4.t > svmguide4.t.scale
-$ python easy.py svmguide4.scale svmguide4.t.scale 
-Accuracy = 69.2308% (216/312) (classification)
-\end{alltt}
-Using the same scaling factors for training and
-testing sets, we obtain much
-better accuracy.
-\begin{alltt}$ ../svm-scale -l 0 -s range4 svmguide4 > svmguide4.scale
-$ ../svm-scale -l 0 -r range4 svmguide4.t > svmguide4.t.scale
-$ python easy.py svmguide4.scale svmguide4.t.scale
-Accuracy = 89.4231\% (279/312) (classification)
-\end{alltt}
-With the correct setting,
-the 10 features in {\tt svmguide4.t.scale} have the
-following maximal values:
-\begin{center}
-  0.7402, 0.4421, 0.6291, 0.8583, 0.5385, 0.7407, 0.3982, 1.0000,
-  0.8218, 0.9874
-\end{center}
-Clearly, the earlier way to scale the 
-testing set to $[0,1]$ generates an erroneous
-set.
 \bibliographystyle{abbrvnat}
 \bibliography{../../sdp}
 \end{document}
