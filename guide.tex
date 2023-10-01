@@ -591,12 +591,12 @@ particularly good for this type of problems. Fortunately, we have another
 {\tt rcv1\_train.binary} from the \libsvm data sets.
 The numbers of instances and features are
 20,242 and 47,236, respectively.
-\begin{alltt}$ time libsvm-2.85/svm-train -c 4 -t 0 -e 0.1 -m 800 -v 5 rcv1_train.binary
+\begin{alltt}$ time libsvm-3.32/svm-train -c 4 -t 0 -e 0.1 -m 800 -v 5 rcv1_train.binary
 Cross Validation Accuracy = 96.8136%
-345.569s
-$ time liblinear-1.21/train -c 4 -e 0.1 -v 5 rcv1_train.binary
-Cross Validation Accuracy = 97.0161%
-2.944s
+202.448s
+$ time liblinear-2.47/train -c 4 -e 0.1 -v 5 rcv1_train.binary
+Cross Validation Accuracy = 96.858%
+0.651s
 \end{alltt}
 For five-fold cross validation,
 \libsvm takes around 350 seconds, but
@@ -615,9 +615,9 @@ document classification. Let us consider a large
 set {\tt 
 rcv1\_test.binary} with
 677,399 instances.
-\begin{alltt}$ time liblinear-1.21/train -c 0.25 -v 5 rcv1_test.binary 
-Cross Validation Accuracy = 97.8538\%
-68.84s
+\begin{alltt}$ time liblinear-2.47/train -c 0.25 -v 5 rcv1_test.binary 
+Cross Validation Accuracy = 97.7859\%
+19.901s
 \end{alltt}
 Note that reading the data takes most of the time.
 The training of each training/validation
@@ -634,12 +634,12 @@ is often faster than the default {\tt -s 1}.  Consider the data
 The number of instances 581,012 is much larger than the number of
 features 54.  We run \liblinear with {\tt -s 1} (default) and {\tt -s
   2}.
-\begin{alltt}$ time liblinear-1.21/train -c 4 -v 5 -s 2 covtype.libsvm.binary.scale 
-Cross Validation Accuracy = 75.67\%
-67.224s
-$ time liblinear-1.21/train -c 4 -v 5 -s 1 covtype.libsvm.binary.scale 
-Cross Validation Accuracy = 75.6711\%
-452.736s
+\begin{alltt}$ time liblinear-2.47/train -c 4 -v 5 -s 2 covtype.libsvm.binary.scale 
+Cross Validation Accuracy = 75.6683\%
+25.148s
+$ time liblinear-2.47/train -c 4 -v 5 -s 1 covtype.libsvm.binary.scale 
+Cross Validation Accuracy = 75.6728\%
+134.857s
 \end{alltt}
 Clearly, using {\tt -s 2} leads to shorter training
 time.
