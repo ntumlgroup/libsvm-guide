@@ -1,6 +1,9 @@
 \documentclass[12pt]{article}
 \usepackage{xspace,amsmath,hyperref,url,color,alltt,epsfig,subfig,pifont}
 \usepackage[round,authoryear]{natbib}
+
+\input{pygments_theme.tex}
+
 \setlength{\textwidth}{6.0in}
 \setlength{\oddsidemargin}{23pt}
 \setlength{\evensidemargin}{23pt}
@@ -268,19 +271,19 @@ as well as testing accuracy.
 \begin{tabular}{cc}
 \subfloat[Training data and an overfitting classifier]{
 \label{1a}
-\includegraphics[width=0.48\linewidth]{over1.png}}&
+\includegraphics[width=0.48\linewidth]{../figures/over1.png}}&
 %\epsfig{figure=over1.ps,width=.4\linewidth}}&
 \subfloat[Applying an overfitting classifier on testing data]{
 \label{1b}
-\includegraphics[width=0.48\linewidth]{over2.png}}\\
+\includegraphics[width=0.48\linewidth]{../figures/over2.png}}\\
 %\epsfig{figure=over2.ps,width=.4\linewidth}}\\
 \subfloat[Training data and a better classifier]{
 \label{1c}
-\includegraphics[width=0.48\linewidth]{over3.png}}&
+\includegraphics[width=0.48\linewidth]{../figures/over3.png}}&
 %\epsfig{figure=over3.ps,width=.4\linewidth}}&
 \subfloat[Applying a better classifier on testing data]{
 \label{1d}
-\includegraphics[width=0.48\linewidth]{over4.png}}
+\includegraphics[width=0.48\linewidth]{../figures/over4.png}}
 %\epsfig{figure=over4.ps,width=.4\linewidth}}
 \end{tabular}
 \end{center}
@@ -314,7 +317,7 @@ e.g.  walking along a path, which can be hard to parallelize.
 \begin{figure}[t!]
 \begin{center}
 %\epsfig{figure=coarser.ps,angle=270,width=.45\linewidth,bbllx=70,bblly=325,bburx=465,bbury=625}
-\includegraphics[width=0.75\linewidth,viewport=145 55 625 450,clip]{coarser.png}
+\includegraphics[width=0.75\linewidth,viewport=145 55 625 450,clip]{../figures/coarser.png}
 %\includegraphics[width=0.9\linewidth]{coarser.pdf}
 \end{center}
 \caption{Loose grid search on $C=2^{-5},2^{-3},\ldots,2^{15}$ and 
@@ -325,7 +328,7 @@ $\gamma=2^{-15},2^{-13},\ldots,2^{3}.$}
 \begin{figure}[t!]
 \begin{center}
 %\epsfig{figure=finer.ps,angle=270,width=.45\linewidth,bbllx=70,bblly=325,bburx=465,bbury=625}
-\includegraphics[width=0.75\linewidth,viewport=145 55 625 450,clip]{finer.png}
+\includegraphics[width=0.75\linewidth,viewport=145 55 625 450,clip]{../figures/finer.png}
 %\includegraphics[width=0.9\linewidth]{finer.pdf}
 \end{center}
 \caption{Fine grid-search on $C=2^{1},2^{1.25},\ldots,2^{5}$ and 
@@ -385,9 +388,11 @@ then model selection) is presented. Finally, we demonstrate the use of
 a tool in \libsvm which does the whole procedure automatically. Note
 that a similar parameter selection tool like the {\tt grid.py}
 presented below is available in the R-\libsvm interface (see the
-function {\tt tune}).
+function {\tt tune}). We also provide an example in Jupyter Notebook,
+please see Appendix \ref{subsec:jupyter-notebook}.
 
 \subsection{Astroparticle Physics}
+\label{sec:astro}
 \begin{itemize}
 \item Original sets with default parameters
 \begin{alltt}$ ./svm-train svmguide1
@@ -480,6 +485,14 @@ Scaling testing data...
 Testing...
 Accuracy = 87.8049% (36/41) (classification)\end{alltt}
 \end{itemize}
+
+
+\subsection{A Jupyter Notebook Example for Appendix \ref{sec:astro}}
+\label{subsec:jupyter-notebook}
+To make the discussion easier, we show only the example from Appendix \ref{sec:astro} here.
+For examples with other data sets, please see \href{https://colab.research.google.com/github/ntumlgroup/libsvm-guide/blob/master/guide.ipynb}{this link}.
+\input{guide_example.tex}
+
 
 \section{Common Mistakes in Scaling Training and Testing Data}
 \label{sec:comm-mist-scal}
@@ -645,5 +658,5 @@ Clearly, using {\tt -s 2} leads to shorter training
 time.
 
 \bibliographystyle{abbrvnat}
-\bibliography{../../sdp}
+\bibliography{sdp/sdp}
 \end{document}
